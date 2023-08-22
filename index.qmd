@@ -1,0 +1,16 @@
+---
+title: "KOICA Lectures on Indian Economy"
+author: "Ayush Patel"
+date: "August, 22 2023"
+format: html
+---
+
+## Introduction
+
+A set of two lectures on the Indian Economy are organised and sponsored by KOICA. The primary audience for these lectures are the various members and associates working at KOICA, and any members of allied agencies that KOICA may choose to invite.
+
+The motivation for these lectures is to understand the economic and social landscape of India. Additionally, to also underline current economic ties between Korea and India.
+
+## Links to lecture materials
+
+  + [Lecture 1](), scheduled on the 25th of August, 2023. This will be a two hour session to discuss the macro aggregates of India, a brief comparison of macro aggregates of India with its neighbors and peers, an overview of industries and trade, and India-Korea trade ties.
