@@ -272,7 +272,9 @@ __A broader comparison with its neighbours and peers is need to better situate t
 
 ## A comparison around the block{.center}
 
-India shares boundaries with Afghanistan, Bangladesh, Bhutan, China, Myanmar, Nepal, Pakistan, and Sri Lanka. Between these sub-continental neighbours there are old economic and cultural ties.
+India shares boundaries with Afghanistan, Bangladesh, Bhutan, China, Myanmar, Nepal, Pakistan, and Sri Lanka. Between these sub-continental neighbours there are old economic and cultural ties. 
+
+_Additionally, Sri Lanka, Pakistan, Nepal, Bangladesh and India are also classified as lower-middle income countries by the World Bank_
 
 We explore and compare core macro indicators of these countries.
 
@@ -296,4 +298,108 @@ comp_block_gni
 comp_block_exp
 
 comp_block_imp
+```
+
+## Closer look at the Indian Industries {.center}
+
+## What sector produces most Value?
+
+```{r componenets-gva}
+#| layout-nrow: 2
+#| fig-width: 13
+#| fig-height: 3.5
+
+tibble::tribble(
+                                                                               ~`Item`,      ~`2015-16`,      ~`2016-17`,      ~`2017-18`,      ~`2018-19`,      ~`2019-20`,      ~`2020-21`,      ~`2021-22`,
+                                                "Agriculture, Forestry and Fishing",  1616146L,  1726004L,  1840023L,  1878598L,  1982303L,  2048032L,  2109697L,
+                                                                         "Industry",  2445981L,  2650508L,  2811690L,  2449954L,  2883735L,  2831536L,  3110404L,
+                                                               "Mining & Quarrying",   317974L,   349248L,   329612L,   326815L,   321766L,   294024L,   327984L,
+                                                                    "Manufacturing",  1903850L,  2054764L,  2209428L,  2328992L,  2261294L,  2247740L,  2470822L,
+                          "Electricity, Gas, Water Supply & Other Utility Services",   224158L,   246496L,   272650L,   294147L,   300675L,   289771L,   311598L,
+                                                                         "Services",  6429743L,  6951772L,  7382458L,  7905246L,  8353438L,  7705506L,  8385373L,
+                                                                     "Construction",   865335L,   916445L,   964306L,  1026789L,  1038680L,   962835L,  1073595L,
+     "Trade, Hotels, Transport, Communication and Services Related to Broadcasting",  1992825L,  2146379L,  2368419L,  2538757L,  2689726L,  2147679L,  2385605L,
+                                   "Financial, Real Estate & Professional Services",  2294787L,  2492967L,  2537190L,  2714222L,  2897393L,  2961910L,  3087360L,
+                                "Public Administration, Defence and Other Services",  1276797L,  1395982L,  1512542L,  1625477L,  1727639L,  1633081L,  1838814L,
+                                                              "GVA at Basic Prices", 10491870L, 11328285L, 12034171L, 12733798L, 13219476L, 12585074L, 13605474L
+     )|>
+  mutate(
+    Item = forcats::fct_reorder(forcats::as_factor(Item),
+                                `2021-22`)
+  )|>
+  pivot_longer(cols = -Item,names_to = "year",values_to = "INR")|>
+  filter(Item != "GVA at Basic Prices")|>
+  mutate(
+    INR = INR/100
+  )-> data_components_gva
+  
+# show absolute values of components of GVA
+data_components_gva|>
+hchart(type = "area", hcaes(x = year, y = INR, group = Item))|>
+  hc_plotOptions(
+    area = list(
+      stacking = "nornmal"
+    )
+  )|>
+  hc_tooltip(
+    shared = T
+  )|>
+  hc_title(
+    text = "Components of GVA at Basic Prices"
+  )|>
+  hc_subtitle(
+    text = "(Base Year 2011-12) Constant Prices"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Billion INR"
+    ),
+    labels = list(
+      format = "{value}B"
+    )
+  )|>
+  hc_caption(
+    text = "Data: NSO"
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F,
+        layout = "proximate"
+  ) -> abs_components_gva
+
+# Show relative values of components of GVA
+data_components_gva|>
+hchart(type = "area", hcaes(x = year, y = INR, group = Item))|>
+  hc_plotOptions(
+    area = list(
+      stacking = "percent"
+    )
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Percentage of GVA"
+    ),
+    labels = list(
+      format = "{value}%"
+    )
+  )|>
+  hc_tooltip(
+    shared = T,
+    pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:.1f})<br/>'
+  )|>
+  hc_title(
+    text = "Components of GVA at Basic Prices"
+  )|>
+  hc_subtitle(
+    text = "(Base Year 2011-12) Constant Prices"
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F,
+        layout = "proximate"
+  ) -> rel_components_gva
+
+abs_components_gva
+
+rel_components_gva
 ```
