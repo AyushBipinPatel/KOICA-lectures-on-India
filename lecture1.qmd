@@ -1,0 +1,299 @@
+---
+title: "An overview of the Indian Economy"
+author: "Ayush Patel"
+date: "August 25, 2023"
+subtitle: "Macro Aggregates, Industries and Trade"
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+execute: 
+  echo: false
+  warning: false
+---
+
+
+```{r libraries}
+library(here) # directories management
+library(dplyr) # data wrangling
+library(tidyr) # data wrangling
+library(highcharter) # interactive data viz
+
+```
+
+```{r loaddata}
+data_block_core_macro <- readr::read_csv(
+  "data/neighbours data gdp gni gdp growth.csv"
+)|>
+  janitor::clean_names()
+
+names_neighbours_iso3c <- c("AFG","BGD","PAK","IND",
+                            "CHN","BTN","MMR","NPL","LKA")
+```
+
+```{r block-comp-charts-gdp}
+
+# GDP of neighbours
+
+data_block_core_macro |>
+  filter(country_code %in% names_neighbours_iso3c)|>
+  filter(indicator_name == "GDP (current US$)")|>
+  pivot_longer(cols = 5:67,
+               names_to = "year",values_to = "gdp")|>
+  mutate(
+    year = as.numeric(
+      stringr::str_remove_all(year,"x")
+    )
+  )|>
+  hchart(type = "spline",
+         hcaes(x = year, y = gdp,
+               name = paste(indicator_name,year),
+                  group = country_name))|>
+  hc_title(
+    text = "GDP (Current USD) - India and it's neighbours"
+  )|>
+  hc_caption(
+    text = "Data: World Bank - World Development Indicators"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "GDP in current USD"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x")-> comp_block_gdp
+
+# GDP growth of neighbours
+
+data_block_core_macro |>
+  filter(country_code %in% names_neighbours_iso3c)|>
+  filter(indicator_name == "GDP growth (annual %)")|>
+  pivot_longer(cols = 5:67,
+               names_to = "year",values_to = "gdp_grw")|>
+  mutate(
+    year = as.numeric(
+      stringr::str_remove_all(year,"x")
+    )
+  )|>
+  hchart(type = "spline",
+         hcaes(x = year, y = gdp_grw,
+               name = paste(indicator_name,year),
+                  group = country_name))|>
+  hc_title(
+    text = "Annual GDP Growth (%) - India and it's neighbours"
+  )|>
+  hc_caption(
+    text = "Data: World Bank - World Development Indicators"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Percentage GDP Growth"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x")-> comp_block_gdp_grw
+
+# GNI per capita of neighbours
+
+data_block_core_macro |>
+  filter(country_code %in% names_neighbours_iso3c)|>
+  filter(indicator_name == "GNI per capita, PPP (current international $)")|>
+  pivot_longer(cols = 5:67,
+               names_to = "year",values_to = "gni")|>
+  mutate(
+    year = as.numeric(
+      stringr::str_remove_all(year,"x")
+    )
+  )|>
+  filter(year >= 1990)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = gni,
+               name = paste(indicator_name,year),
+                  group = country_name))|>
+  hc_title(
+    text = "GNI per capita, PPP (current international $)"
+  )|>
+  hc_caption(
+    text = "Data: World Bank - World Development Indicators"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Per capita GNI in current USD, PPP"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x")-> comp_block_gni
+
+```
+
+```{r block-comp-charts-exim}
+
+# Exports of neighbours
+
+data_block_core_macro |>
+  filter(country_code %in% names_neighbours_iso3c)|>
+  filter(indicator_name == "Exports of goods and services (% of GDP)")|>
+  pivot_longer(cols = 5:67,
+               names_to = "year",values_to = "exp")|>
+  mutate(
+    year = as.numeric(
+      stringr::str_remove_all(year,"x")
+    )
+  )|>
+  hchart(type = "spline",
+         hcaes(x = year, y = exp,
+               name = paste(indicator_name,year),
+                  group = country_name))|>
+  hc_title(
+    text = "Exports as % of GDP- India and it's neighbours"
+  )|>
+  hc_caption(
+    text = "Data: World Bank - World Development Indicators"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Percentage of GDP"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x")-> comp_block_exp
+
+# imports of neighbours
+
+data_block_core_macro |>
+  filter(country_code %in% names_neighbours_iso3c)|>
+  filter(indicator_name == "Imports of goods and services (% of GDP)")|>
+  pivot_longer(cols = 5:67,
+               names_to = "year",values_to = "imp")|>
+  mutate(
+    year = as.numeric(
+      stringr::str_remove_all(year,"x")
+    )
+  )|>
+  hchart(type = "spline",
+         hcaes(x = year, y = imp,
+               name = paste(indicator_name,year),
+                  group = country_name))|>
+  hc_title(
+    text = "Imports as a % of GDP- India and it's neighbours"
+  )|>
+  hc_caption(
+    text = "Data: World Bank - World Development Indicators"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Percentage of GDP"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x")-> comp_block_imp
+
+```
+
+
+## Hello
+
+::::{.columns}
+
+:::{.column width="70%"}
+[I am Ayush.]{.fragment fragment-index="1" style="font-size:45px"}
+
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"} 
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics.]{.fragment fragment-index="3" style="font-size:25px"} 
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"} 
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"} 
+:::
+
+:::{.column width="30%"}
+
+__Reach me__
+
+{{< fa solid envelope >}} [ayush.ap58@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel@gipe.ac.in]{style="font-size:25px"}
+
+:::
+
+::::
+
+## Topics and Flow{.center}
+
+  + Macro Aggregates of Indian Economy
+  + Industries in India and other sectors
+  + Trade 
+  
+:::{.notes}
+
+1. in macro aggregates, provide comparison with neighbours and peers
+
+2. Provide details on major industries, credit flows to industries and value addition by industries
+
+3. Major commodities in India and major partners
+
+:::
+  
+## Macro Aggregates of the Indian Economy{.center}
+
+## India in numbers - some basic facts{.smaller}
+
+
+  + India is home to more than 1.4 billion people^[see [U.N. 2022 revision](https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/wpp2022_summary_of_results.pdf)].
+  + India is among the top 5 largest economies (3.38 trillion USD) in the world.^[see table on [World Bank data bak](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2022&most_recent_value_desc=true&start=2022&view=bar)] 
+  + With USD 2,380 GNI per capita (same PPP for USD8210) India falls under the Lower-Middle Income classification of the World Bank.^[see [WB Income Classification](https://blogs.worldbank.org/opendata/new-world-bank-group-country-classifications-income-level-fy24)]
+  + OPHI reports an MPI of 0.069 for India with 16.39% Headcount of multidimensionally poor and 41.98% Intensity of poverty.^[see [OPHI Databank](https://trainingidn.shinyapps.io/OPHIDataBankGlobalComparison/)]
+
+__A broader comparison with its neighbours and peers is need to better situate the Indian Economy on a global stage.__
+
+## A comparison around the block{.center}
+
+India shares boundaries with Afghanistan, Bangladesh, Bhutan, China, Myanmar, Nepal, Pakistan, and Sri Lanka. Between these sub-continental neighbours there are old economic and cultural ties.
+
+We explore and compare core macro indicators of these countries.
+
+## GDP and GNI per capita - The Neighbours
+
+```{r block-show-gdp}
+#| layout-nrow: 1
+#| fig-height: 6
+
+comp_block_gdp
+
+comp_block_gni
+```
+
+## Export & Imports - The Neighbours
+
+```{r block-show-exim}
+#| layout-nrow: 1
+#| fig-height: 6
+
+comp_block_exp
+
+comp_block_imp
+```
