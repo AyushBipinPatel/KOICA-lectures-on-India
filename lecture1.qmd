@@ -24,6 +24,8 @@ library(highcharter) # interactive data viz
 ```
 
 ```{r loaddata}
+
+# data for comparison of the peer marco agg
 data_block_core_macro <- readr::read_csv(
   "data/neighbours data gdp gni gdp growth.csv"
 )|>
@@ -31,6 +33,12 @@ data_block_core_macro <- readr::read_csv(
 
 names_neighbours_iso3c <- c("AFG","BGD","PAK","IND",
                             "CHN","BTN","MMR","NPL","LKA")
+
+# data for flow of resources to the commercial sector
+
+data_flow_resource <- readr::read_csv("data/flow of resources to commercial sector.csv")|>
+  janitor::remove_empty(which = "rows")
+
 ```
 
 ```{r block-comp-charts-gdp}
@@ -404,7 +412,6 @@ abs_components_gva
 rel_components_gva
 ```
 
-
 ## Components of the GDP
 
 ```{r components-gdp}
@@ -503,4 +510,105 @@ abs_components_gdp
 
 rel_components_gdp
 ```
+
+## Is there trust? {.center}
+
+Generally, investments and deployment of resources show level of trust in an economic activity.
+
+## Flow of Resources to Commercial Sector
+
+```{r flow-resource}
+#| layout-nrow: 2
+#| fig-width: 13
+#| fig-height: 3.5
+
+data_flow_resource|>
+  select(1:12)|>
+  mutate(
+    source = forcats::fct_reorder(
+      forcats::as_factor(source),
+                                `2021-22`)
+  )|>
+  pivot_longer(cols = -source,
+               names_to = "year",
+               values_to = "INR")|>
+  mutate(
+    INR = INR/100
+  )-> data_flow_resource
+
+# show absolute flow of resources to commercial sector
+data_flow_resource|>
+hchart(type = "area", hcaes(x = year, y = INR, 
+                            group = source))|>
+  hc_plotOptions(
+    area = list(
+      stacking = "nornmal"
+    )
+  )|>
+  hc_tooltip(
+    shared = T
+  )|>
+  hc_title(
+    text = "Flow of Resources to Commercial Sector"
+  )|>
+  hc_subtitle(
+    text = "2021-22 data is provisional"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Billion INR"
+    ),
+    labels = list(
+      format = "{value}B"
+    )
+  )|>
+  hc_caption(
+    text = "Source: RBI, SEBI, BSE, NSE, Merchant Banks, LIC and NHB.											
+"
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F,
+        layout = "proximate"
+  ) -> abs_flow
+
+# show relative flow of resources to commercial sector
+data_flow_resource|>
+hchart(type = "area", hcaes(x = year, y = INR, 
+                            group = source))|>
+  hc_plotOptions(
+    area = list(
+      stacking = "percent"
+    )
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Percentage of total resource deployed"
+    ),
+    labels = list(
+      format = "{value}%"
+    )
+  )|>
+  hc_tooltip(
+    shared = T,
+    pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:.1f})<br/>'
+  )|>
+  hc_title(
+    text = "Flow of Resources to Commercial Sector"
+  )|>
+  hc_subtitle(
+    text = "data for 2021 is provisional"
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F,
+        layout = "proximate"
+  ) -> rel_flow
+
+abs_flow
+
+rel_flow
+
+```
+
 
