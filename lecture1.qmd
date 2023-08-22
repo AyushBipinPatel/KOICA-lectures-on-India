@@ -403,3 +403,104 @@ abs_components_gva
 
 rel_components_gva
 ```
+
+
+## Components of the GDP
+
+```{r components-gdp}
+#| layout-nrow: 2
+#| fig-width: 13
+#| fig-height: 3.5
+
+
+tibble::tribble(
+                                            ~`Item`,      ~`2015-16`,      ~`2016-17`,      ~`2017-18`,      ~`2018-19`,      ~`2019-20`,      ~`2020-21`,      ~`2021-22`,
+        "Private Final Consumption Expenditure", 6381419L, 6900236L, 7330728L, 7850444L, 8259704L, 7763734L, 8377854L,
+     "Government Final Consumption Expenditure", 1132802L, 1201598L, 1344843L, 1434945L, 1484272L, 1537603L, 1577132L,
+                "Gross Fixed Capital Formation", 3492183L, 3787568L, 4083079L, 4540509L, 4611021L, 4131279L, 4784054L,
+                            "Changes in Stocks",  239557L,  122639L,  206436L,  262771L,  108284L,  -11573L,  187937L,
+                                    "Valuables",  185986L,  151479L,  212307L,  191704L,  164527L,  207980L,  295046L,
+                "Exports of Goods and Services", 2370282L, 2488423L, 2602012L, 2912480L, 2813609L, 2553683L, 3174844L,
+                 "Import of Goods and Services", 2511540L, 2621593L, 3078274L, 3349861L, 3321586L, 2862871L, 3878193L,
+                                "Discrepancies",   78804L,  277844L,  443451L,  149920L,  396125L,  238638L,  216842L
+     )|>
+  mutate(
+    Item = forcats::fct_reorder(forcats::as_factor(Item),
+                                `2021-22`)
+  )|>
+  pivot_longer(cols = -Item,names_to = "year",values_to = "INR")|>
+  mutate(
+    INR = INR/100
+  )-> data_components_gdp
+  
+# show absolute values of components of GDP
+data_components_gdp|>
+hchart(type = "area", hcaes(x = year, y = INR, group = Item))|>
+  hc_plotOptions(
+    area = list(
+      stacking = "nornmal"
+    )
+  )|>
+  hc_tooltip(
+    shared = T
+  )|>
+  hc_title(
+    text = "Components of GDP at Basic Prices"
+  )|>
+  hc_subtitle(
+    text = "(Base Year 2011-12) Constant Prices"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Billion INR"
+    ),
+    labels = list(
+      format = "{value}B"
+    )
+  )|>
+  hc_caption(
+    text = "Data: NSO"
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F,
+        layout = "proximate"
+  ) -> abs_components_gdp
+
+# Show relative values of components of GDP
+data_components_gdp|>
+hchart(type = "area", hcaes(x = year, y = INR, group = Item))|>
+  hc_plotOptions(
+    area = list(
+      stacking = "percent"
+    )
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Percentage of GDP"
+    ),
+    labels = list(
+      format = "{value}%"
+    )
+  )|>
+  hc_tooltip(
+    shared = T,
+    pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:.1f})<br/>'
+  )|>
+  hc_title(
+    text = "Components of GDP at Basic Prices"
+  )|>
+  hc_subtitle(
+    text = "(Base Year 2011-12) Constant Prices"
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F,
+        layout = "proximate"
+  ) -> rel_components_gdp
+
+abs_components_gdp
+
+rel_components_gdp
+```
+
