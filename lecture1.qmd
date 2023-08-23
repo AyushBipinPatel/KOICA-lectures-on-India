@@ -59,6 +59,28 @@ data_bank_credit_industries <- readr::read_csv(
     INR = INR/100
   )
 
+# data for trade balance
+
+data_trade_balance <- readr::read_csv("data/trade balance.csv")|>
+  pivot_longer(cols = -Year,
+               names_to = "group",
+               values_to = "INR")|>
+  mutate(
+    INR = INR/100,
+    group = case_when(
+      group == "exp_oils" ~ "Oil Exports",
+      group == "exp_non_oils" ~ "Non-Oil Exports",
+      group == "exp_total" ~ "Total Exports",
+      group == "imp_oil" ~ "Oil Imports",
+      group == "imp_non_oils" ~ "Non-Oil Imports",
+      group == "imp_total" ~ "Total Imports",
+      group == "tb_oils" ~ "Oil Trade Balance",
+      group == "tb_non_oils" ~ "Non-Oil Trade Balance",
+      group == "tb_total" ~ "Total Trade Balance"
+      
+    )
+  )
+
 ```
 
 ```{r block-comp-charts-gdp}
@@ -717,6 +739,62 @@ hchart(type = "area", hcaes(x = year, y = INR,
 abs_gross
 
 rel_gross
+
+```
+
+## Trade{.center}
+
+##  Historical Trade Balance  - India
+
+```{r tradebalance}
+#| fig-width: 14
+#| fig-height: 6.5
+
+# show absolute trade balance
+data_trade_balance|>
+  filter(!stringr::str_detect(group,"Total"))|>
+  filter(!stringr::str_detect(group,"Balance"))|>
+  mutate(
+    group = forcats::fct_reorder(
+      forcats::as_factor(group),
+      INR
+    )
+  )|>
+hchart(type = "area", hcaes(x = Year, y = INR, 
+                            group = group))|>
+  hc_plotOptions(
+    area = list(
+      stacking = "nornmal"
+    )
+  )|>
+  hc_tooltip(
+    shared = T
+  )|>
+  hc_title(
+    text = "Historical Trade Balance"
+  )|>
+  hc_subtitle(
+    text = "2021-22 data is provisional"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Billion INR"
+    ),
+    labels = list(
+      format = "{value}B"
+    )
+  )|>
+  hc_caption(
+    text = "Source : Directorate General of Commercial Intelligence and Statistics."
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F,
+        layout = "proximate"
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> abs_tb
+
+abs_tb
 
 ```
 
