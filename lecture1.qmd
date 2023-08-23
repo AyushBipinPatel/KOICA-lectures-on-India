@@ -39,6 +39,26 @@ names_neighbours_iso3c <- c("AFG","BGD","PAK","IND",
 data_flow_resource <- readr::read_csv("data/flow of resources to commercial sector.csv")|>
   janitor::remove_empty(which = "rows")
 
+# data for gross bank credit to industries
+
+data_bank_credit_industries <- readr::read_csv(
+  "data/gross deployment of credit to industries.csv"
+)|>
+  filter(stringr::str_length(srn)<=4)|>
+  select(-srn)|>
+  mutate(
+    industry = forcats::fct_reorder(
+      forcats::as_factor(industry),
+      `2021-22`
+    )
+  )|>
+  pivot_longer(cols = -industry,
+               names_to = "year",
+               values_to = "INR")|>
+  mutate(
+    INR = INR/100
+  )
+
 ```
 
 ```{r block-comp-charts-gdp}
@@ -611,4 +631,84 @@ rel_flow
 
 ```
 
+## Gross Bank Credit to Industries{.scrollable}
+
+```{r gross-bank-abs}
+#| fig-width: 14
+#| fig-height: 6
+
+
+# show absolute gross bank credit
+data_bank_credit_industries|>
+hchart(type = "area", hcaes(x = year, y = INR, 
+                            group = industry))|>
+  hc_plotOptions(
+    area = list(
+      stacking = "normal"
+    )
+  )|>
+  hc_tooltip(
+    shared = T
+  )|>
+  hc_title(
+    text = "Gross Bank Credit to Industries"
+  )|>
+  hc_subtitle(
+    text = "Data is provisional"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Billion INR"
+    ),
+    labels = list(
+      format = "{value}B"
+    )
+  )|>
+  hc_caption(
+    text = "Source: RBI."
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F,
+        layout = "proximate"
+  ) -> abs_gross
+
+# show relative gross bank credit
+data_bank_credit_industries|>
+hchart(type = "area", hcaes(x = year, y = INR, 
+                            group = industry))|>
+  hc_plotOptions(
+    area = list(
+      stacking = "percent"
+    )
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Percentage of total gross bank credit"
+    ),
+    labels = list(
+      format = "{value}%"
+    )
+  )|>
+  hc_tooltip(
+    shared = T,
+    pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:.1f})<br/>'
+  )|>
+  hc_title(
+    text = "Gross Bank Credit to Industries"
+  )|>
+  hc_subtitle(
+    text = "Data is provisional"
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F,
+        layout = "proximate"
+  ) -> rel_gross
+
+abs_gross
+
+rel_gross
+
+```
 
