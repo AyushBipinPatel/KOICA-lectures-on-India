@@ -393,7 +393,8 @@ hchart(type = "area", hcaes(x = year, y = INR, group = Item))|>
         align = 'right',
         floating = F,
         layout = "proximate"
-  ) -> abs_components_gva
+  ) |>
+  highcharter::hc_chart(zoomType = "x")-> abs_components_gva
 
 # Show relative values of components of GVA
 data_components_gva|>
@@ -425,7 +426,8 @@ hchart(type = "area", hcaes(x = year, y = INR, group = Item))|>
         align = 'right',
         floating = F,
         layout = "proximate"
-  ) -> rel_components_gva
+  )|>
+  highcharter::hc_chart(zoomType = "x")-> rel_components_gva
 
 abs_components_gva
 
@@ -492,7 +494,8 @@ hchart(type = "area", hcaes(x = year, y = INR, group = Item))|>
         align = 'right',
         floating = F,
         layout = "proximate"
-  ) -> abs_components_gdp
+  )|>
+  highcharter::hc_chart(zoomType = "x")-> abs_components_gdp
 
 # Show relative values of components of GDP
 data_components_gdp|>
@@ -524,7 +527,8 @@ hchart(type = "area", hcaes(x = year, y = INR, group = Item))|>
         align = 'right',
         floating = F,
         layout = "proximate"
-  ) -> rel_components_gdp
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> rel_components_gdp
 
 abs_components_gdp
 
@@ -590,7 +594,8 @@ hchart(type = "area", hcaes(x = year, y = INR,
         align = 'right',
         floating = F,
         layout = "proximate"
-  ) -> abs_flow
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> abs_flow
 
 # show relative flow of resources to commercial sector
 data_flow_resource|>
@@ -623,7 +628,8 @@ hchart(type = "area", hcaes(x = year, y = INR,
         align = 'right',
         floating = F,
         layout = "proximate"
-  ) -> rel_flow
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> rel_flow
 
 abs_flow
 
@@ -671,7 +677,8 @@ hchart(type = "area", hcaes(x = year, y = INR,
         align = 'right',
         floating = F,
         layout = "proximate"
-  ) -> abs_gross
+  )|>
+  highcharter::hc_chart(zoomType = "x")-> abs_gross
 
 # show relative gross bank credit
 data_bank_credit_industries|>
@@ -704,7 +711,8 @@ hchart(type = "area", hcaes(x = year, y = INR,
         align = 'right',
         floating = F,
         layout = "proximate"
-  ) -> rel_gross
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> rel_gross
 
 abs_gross
 
