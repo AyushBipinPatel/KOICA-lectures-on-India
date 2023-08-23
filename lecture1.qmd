@@ -81,6 +81,19 @@ data_trade_balance <- readr::read_csv("data/trade balance.csv")|>
     )
   )
 
+# flow of trade data
+
+data_flow_trade <- readr::read_csv("data/flow of trade.csv")|>
+  pivot_longer(cols = - country,
+               names_to = "year_exim",
+               values_to =  "usd_mil")|>
+  mutate(
+    flow = stringr::str_extract(year_exim,
+                                ".+(?=_)"),
+    year = stringr::str_extract(year_exim,
+                                "(?<=_).+")
+  )
+
 ```
 
 ```{r block-comp-charts-gdp}
@@ -795,6 +808,228 @@ hchart(type = "area", hcaes(x = Year, y = INR,
   highcharter::hc_chart(zoomType = "x") -> abs_tb
 
 abs_tb
+
+```
+
+## Flow of trade 2017-18
+
+```{r flow17}
+#| fig-width: 14
+#| fig-height: 6.5
+
+  data_flow_trade|>
+  filter(year == "17-18")|>
+  pivot_wider(names_from = flow,
+              values_from = usd_mil,
+              values_fill = 0)|>
+group_by(country)|>
+  summarise(
+    exp = sum(exp),
+    imp = sum(imp)
+  )|>
+  ungroup()|>
+  mutate(
+    diff = imp-exp
+  )|>
+  arrange(diff)|>
+  hchart(type = "dumbbell",
+         hcaes(x =country,high = imp,low = exp))|>
+  hc_yAxis(
+    title = list(
+      text = "Distance between Imports and Exports in USD"
+    )
+  )|>
+  hc_title(
+    text = "India Flow of trade with major countries"
+  )|>
+  hc_tooltip(
+    pointFormat = '<span style="color:skyblue"><strong>Imports</strong></span>:{point.imp}<br><span style="color:black"><strong>Exports</strong></span>:{point.exp}'
+  )
+
+```
+
+
+## Flow of trade 2018-19
+
+```{r flow18}
+#| fig-width: 14
+#| fig-height: 6.5
+
+  data_flow_trade|>
+  filter(year == "18-19")|>
+  pivot_wider(names_from = flow,
+              values_from = usd_mil,
+              values_fill = 0)|>
+group_by(country)|>
+  summarise(
+    exp = sum(exp),
+    imp = sum(imp)
+  )|>
+  ungroup()|>
+  mutate(
+    diff = imp-exp
+  )|>
+  arrange(diff)|>
+  hchart(type = "dumbbell",
+         hcaes(x =country,high = imp,low = exp))|>
+  hc_yAxis(
+    title = list(
+      text = "Distance between Imports and Exports in USD"
+    )
+  )|>
+  hc_title(
+    text = "India Flow of trade with major countries"
+  )|>
+  hc_tooltip(
+    pointFormat = '<span style="color:skyblue"><strong>Imports</strong></span>:{point.imp}<br><span style="color:black"><strong>Exports</strong></span>:{point.exp}'
+  )
+
+```
+
+
+## Flow of trade 2019-20
+
+```{r flow19}
+#| fig-width: 14
+#| fig-height: 6.5
+
+  data_flow_trade|>
+  filter(year == "19-20")|>
+  pivot_wider(names_from = flow,
+              values_from = usd_mil,
+              values_fill = 0)|>
+group_by(country)|>
+  summarise(
+    exp = sum(exp),
+    imp = sum(imp)
+  )|>
+  ungroup()|>
+  mutate(
+    diff = imp-exp
+  )|>
+  arrange(diff)|>
+  hchart(type = "dumbbell",
+         hcaes(x =country,high = imp,low = exp))|>
+  hc_yAxis(
+    title = list(
+      text = "Distance between Imports and Exports in USD"
+    )
+  )|>
+  hc_title(
+    text = "India Flow of trade with major countries"
+  )|>
+  hc_tooltip(
+    pointFormat = '<span style="color:skyblue"><strong>Imports</strong></span>:{point.imp}<br><span style="color:black"><strong>Exports</strong></span>:{point.exp}'
+  )
+
+```
+
+
+## Flow of trade 2020-21
+
+```{r flow20}
+#| fig-width: 14
+#| fig-height: 6.5
+
+  data_flow_trade|>
+  filter(year == "20-21")|>
+  pivot_wider(names_from = flow,
+              values_from = usd_mil,
+              values_fill = 0)|>
+group_by(country)|>
+  summarise(
+    exp = sum(exp),
+    imp = sum(imp)
+  )|>
+  ungroup()|>
+  mutate(
+    diff = imp-exp
+  )|>
+  arrange(diff)|>
+  hchart(type = "dumbbell",
+         hcaes(x =country,high = imp,low = exp))|>
+  hc_yAxis(
+    title = list(
+      text = "Distance between Imports and Exports in USD"
+    )
+  )|>
+  hc_title(
+    text = "India Flow of trade with major countries"
+  )|>
+  hc_tooltip(
+    pointFormat = '<span style="color:skyblue"><strong>Imports</strong></span>:{point.imp}<br><span style="color:black"><strong>Exports</strong></span>:{point.exp}'
+  )
+
+```
+
+
+## Flow of trade 2021-22
+
+```{r flow21}
+#| fig-width: 14
+#| fig-height: 6.5
+
+  data_flow_trade|>
+  filter(year == "21-22")|>
+  pivot_wider(names_from = flow,
+              values_from = usd_mil,
+              values_fill = 0)|>
+group_by(country)|>
+  summarise(
+    exp = sum(exp),
+    imp = sum(imp)
+  )|>
+  ungroup()|>
+  mutate(
+    diff = imp-exp
+  )|>
+  arrange(diff)|>
+  hchart(type = "dumbbell",
+         hcaes(x =country,high = imp,low = exp))|>
+  hc_yAxis(
+    title = list(
+      text = "Distance between Imports and Exports in USD"
+    )
+  )|>
+  hc_title(
+    text = "India Flow of trade with major countries"
+  )|>
+  hc_tooltip(
+    pointFormat = '<span style="color:skyblue"><strong>Imports</strong></span>:{point.imp}<br><span style="color:black"><strong>Exports</strong></span>:{point.exp}'
+  )
+
+```
+
+## Flow of trade with South Korea
+
+```{r}
+#| fig-width: 14
+#| fig-height: 6.5
+
+data_flow_trade|>
+  filter(country == "South Korea")|>
+  mutate(
+    flow = case_when(
+      flow == "exp" ~ "Exports to S.Korea",
+      T ~ "Imports from S.Korea"
+    )
+  )|>
+  hchart(type = "spline", 
+         hcaes(x =year,y=usd_mil,group = flow))|>
+  hc_title(
+    text = "Trade Balance with South Korea"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "USD Million"
+    )
+  )|>
+  hc_tooltip(
+    shared = T
+  )|>
+  hc_caption(
+    text = "Source : Directorate General of Commercial Intelligence and statistics."
+  )
 
 ```
 
