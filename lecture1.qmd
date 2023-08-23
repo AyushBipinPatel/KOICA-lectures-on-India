@@ -1006,16 +1006,16 @@ group_by(country)|>
 #| fig-width: 14
 #| fig-height: 6.5
 
-data_flow_trade|>
-  filter(country == "South Korea")|>
-  mutate(
-    flow = case_when(
-      flow == "exp" ~ "Exports to S.Korea",
-      T ~ "Imports from S.Korea"
-    )
+data_koread <- readr::read_csv("data/imports from korea.csv")
+
+
+data_koread|>
+  group_by(year,flow)|>
+  summarise(
+    value = sum(value, na.rm = T)
   )|>
   hchart(type = "spline", 
-         hcaes(x =year,y=usd_mil,group = flow))|>
+         hcaes(x =year,y=value,group = flow))|>
   hc_title(
     text = "Trade Balance with South Korea"
   )|>
@@ -1028,8 +1028,147 @@ data_flow_trade|>
     shared = T
   )|>
   hc_caption(
-    text = "Source : Directorate General of Commercial Intelligence and statistics."
+    text = "Ministry of Commerce; Export - Import Data bank."
   )
 
 ```
+
+## Major Commodities Exported to Korea{.scrollable}
+
+```{r}
+data_koread|>
+  mutate(
+    commodity = stringr::str_remove_all(commodity,
+                                        "\xa0")
+  )|>
+  filter(flow == "exp")|>
+  group_by(hsc,commodity)|>
+  summarise(
+    `Median Exports` = median(value, na.rm = T)
+  )|>
+  ungroup()|>
+  arrange(desc(`Median Exports`))|>
+  gt::gt()
+  
+```
+
+## Major Commodities Exported to Korea
+
+```{r}
+#| fig-width: 14
+#| fig-height: 6.5
+
+
+data_koread|>
+  mutate(
+    commodity = stringr::str_remove_all(commodity,
+                                        "\xa0")
+  )|>
+  filter(flow == "exp" &
+           hsc %in% c(27,76,29,72,52,84,23,79,85,26))|>
+  hchart(
+    type = "spline",
+    hcaes(x = year, y = value, group = commodity)
+  )|>
+  
+  hc_tooltip(
+    shared = T
+  )|>
+  hc_title(
+    text = "Major Exported commodities to Korea"
+  )|>
+  hc_subtitle(
+    text = "2021-22 data is provisional"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "USD"
+    )
+  )|>
+  hc_caption(
+    text = "Source : Ministry of Commerce; Import export data bank"
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F
+  )|>
+  highcharter::hc_chart(zoomType = "x")
+```
+
+
+## Major Commodities Imported from Korea{.scrollable}
+
+```{r}
+data_koread|>
+  mutate(
+    commodity = stringr::str_remove_all(commodity,
+                                        "\xa0")
+  )|>
+  filter(flow == "imp")|>
+  group_by(hsc,commodity)|>
+  summarise(
+    `Median Imports` = median(value, na.rm = T)
+  )|>
+  ungroup()|>
+  arrange(desc(`Median Imports`))|>
+  gt::gt()
+```
+
+## Major Commodities Imported from Korea
+
+```{r}
+#| fig-width: 14
+#| fig-height: 6.5
+
+
+data_koread|>
+  mutate(
+    commodity = stringr::str_remove_all(commodity,
+                                        "\xa0")
+  )|>
+  filter(flow == "imp" &
+           hsc %in% c(85,72,84,39,29,27,87,40,90,73))|>
+  hchart(
+    type = "spline",
+    hcaes(x = year, y = value, group = commodity)
+  )|>
+  
+  hc_tooltip(
+    shared = T
+  )|>
+  hc_title(
+    text = "Major Imported commodities from Korea"
+  )|>
+  hc_subtitle(
+    text = "2021-22 data is provisional"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "USD"
+    )
+  )|>
+  hc_caption(
+    text = "Source : Ministry of Commerce; Import export data bank"
+  )|>
+  hc_legend(
+        align = 'right',
+        floating = F
+  )|>
+  highcharter::hc_chart(zoomType = "x")
+```
+
+
+## Further Scope to understand the India - Korea Trade dynamics 
+
+  + Using the major imported commodities from Korea, carry out an analysis that provides total volume of these commodities imported by India from various nations. 
+  + Using the major exported commodities to Korea, carry out analysis that shows total volume of these commodities imported by Korea from across globe. This may help with understand competitiveness.
+  + HSC codes data is available with 6 digits breakup, a more nuanced analysis can be carried our for commodities of special interest.
+  
+## Discussion {.center}
+
+  + Any question
+  + Make in India - jobs availability, labour force participation
+  + Skill Development and state policy
+  
+## Thank you
 
