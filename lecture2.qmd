@@ -385,3 +385,1235 @@ agri_employed
   - Today for India, nearly 43% of the total employment is in Agriculture. Even though, value added by agriculture to GDP is ~16%.
   - China, that has a comparable population to India, requires a little more than 3 times the area of agriculture land to support itself. This is despite the fact that yield per hectare in China is higher compared to India^[[see1](https://ageconsearch.umn.edu/record/7510/files/edc87-03.pdf),[see2](https://www.nationmaster.com/country-info/compare/China/India/Agriculture),[see3](https://www.cambridge.org/core/journals/journal-of-asian-studies/article/abs/chinese-and-indian-agriculture-a-broad-comparison-of-recent-policy-and-performance/49317DFE78554C23AC3467F604AF009B)].
   - India has a lower share of irrigated land compared to Bangladesh and Pakistan.
+  
+
+## Labour Force{.center}
+
+  - Does being a populous and young country help?
+  - What is the employment share outside agriculture?
+  - Are women participating in the work force?
+  
+## Labour Force
+
+```{r charts-labour}
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Employment in agriculture, female (% of female employment) (modeled ILO estimate)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Employment in agriculture, female (% of female employment) (modeled ILO estimate)`,
+               name = paste("Employment in agriculture, female (% of female employment) (modeled ILO estimate)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Female Participation in Agriculture"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of total female employment"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> agri_female
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Labor force, total"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Labor force, total`,
+               name = paste("Labor force, total",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Total Labour Force"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Number of People"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> labour_force
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Labor force, female (% of total labor force)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Labor force, female (% of total labor force)`,
+               name = paste("Labor force, female (% of total labor force)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Female Labour Force Participation"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of total labour force"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> labour_force_female
+
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Wage and salaried workers, female (% of female employment) (modeled ILO estimate)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Wage and salaried workers, female (% of female employment) (modeled ILO estimate)`,
+               name = paste("Wage and salaried workers, female (% of female employment) (modeled ILO estimate)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Wage and Salaired Female Workers"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of female employment"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> wage_salary_female_worker
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Age dependency ratio (% of working-age population)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Age dependency ratio (% of working-age population)`,
+               name = paste("Age dependency ratio (% of working-age population)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Age Dependency Ratio"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of working age population"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> age_dependency
+
+```
+
+:::{.panel-tabset}
+
+### Labour Force
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+labour_force
+```
+
+
+### In Agri
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+agri_employed
+```
+
+### Age Dependency
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+age_dependency
+```
+
+:::
+
+## Labour force
+
+:::{.panel-tabset}
+
+### Female-LFP
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+labour_force_female
+```
+### Female in Agri
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+agri_female
+```
+
+### Wage and Salaried
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+wage_salary_female_worker
+```
+
+
+:::
+
+## Electricity{.center}
+
+  - Why special focus on Electricity?
+  - One of the primary inputs required for any economic activity.
+  - Also a signal for standard of living.
+  - Important factors to consider given climate change.
+
+*We will explore access to electricity, Per capita power consumption, and renewable electricity output.*
+
+## Electricity
+
+```{r charts-ele}
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Access to electricity (% of population)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Access to electricity (% of population)`,
+               name = paste("Access to electricity (% of population)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Access to Electricity - National"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of total population"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> access_naitonal
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Access to electricity, rural (% of rural population)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Access to electricity, rural (% of rural population)`,
+               name = paste("Access to electricity, rural (% of rural population)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Access to Electricity - Rural"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of total population"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> access_rural
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Electric power consumption (kWh per capita)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Electric power consumption (kWh per capita)`,
+               name = paste("Electric power consumption (kWh per capita)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Electric power consumption per capita"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "KWh per capita"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> ele_consumption_per_head
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Renewable electricity output (% of total electricity output)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Renewable electricity output (% of total electricity output)`,
+               name = paste("Renewable electricity output (% of total electricity output)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Renewable electricity output"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of total electricity output"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> renew_output
+
+```
+
+:::{.panel-tabset}
+
+### National
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+access_naitonal
+```
+
+### Rural
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+access_rural
+```
+
+### Consumption
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+ele_consumption_per_head
+```
+
+### Renewable Output
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+renew_output
+```
+
+:::
+
+## Health{.center}
+
+   - Studies show relation between nutrition  intake and growth.^[[see1](https://www.fao.org/3/ae030t/ae030t.pdf),[see2](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1839860/#:~:text=Links%20between%20nutrition%20and%20economic,rates%20declined%20by%20~5%25.)]
+   - Health of labour force has implications for economy.
+   - There is intrinsic value in having good health indicators.
+   - Signals welfare functioning of the state.
+   
+## Health 
+
+```{r health-charts1}
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Current health expenditure per capita, PPP (current international $)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Current health expenditure per capita, PPP (current international $)`,
+               name = paste("Current health expenditure per capita, PPP (current international $)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Health Expenditure Per capita"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "PPP (Current International $)"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> exp_health
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Life expectancy at birth, total (years)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Life expectancy at birth, total (years)`,
+               name = paste("Life expectancy at birth, total (years)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Life expectancy at birth"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Years (total)"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> life_years
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Birth rate, crude (per 1,000 people)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Birth rate, crude (per 1,000 people)`,
+               name = paste("Birth rate, crude (per 1,000 people)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Birth rate, crude (per 1,000 people)"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Number per 1000 people"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> birth_rate
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Fertility rate, total (births per woman)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Fertility rate, total (births per woman)`,
+               name = paste("Fertility rate, total (births per woman)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Fertility rate, total"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Births per woman"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> fert_rate
+
+```
+
+:::{.panel-tabset}
+
+### Expenditure
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+exp_health
+```
+
+### Life Expectancy
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+life_years
+```
+### Birth Rate
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+birth_rate
+```
+### Fertility
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+fert_rate
+```
+
+:::
+   
+## Health
+
+```{r health-charts2}
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Prevalence of anemia among non-pregnant women (% of women ages 15-49)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Prevalence of anemia among non-pregnant women (% of women ages 15-49)`,
+               name = paste("Prevalence of anemia among non-pregnant women (% of women ages 15-49)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Anemia among non-pregnant women (age 15-49)"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of women between 15-49"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> anemia_w
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Prevalence of anemia among pregnant women (%)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Prevalence of anemia among pregnant women (%)`,
+               name = paste("Prevalence of anemia among pregnant women (%)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Anemia among pregnant women"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of pregnant women"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> anemia_p
+
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Maternal mortality ratio (modeled estimate, per 100,000 live births)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Maternal mortality ratio (modeled estimate, per 100,000 live births)`,
+               name = paste("Maternal mortality ratio (modeled estimate, per 100,000 live births)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Maternal mortality ratio (modeled estimate, per 100,000 live births)"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Deaths per 100,000 live births"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> mat_mort
+
+```
+
+:::{.panel-tabset}
+
+### [Anemia]{style="font-size:25px"}
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+anemia_w
+```
+### [Anemia Pregnamt Women]{style="font-size:25px"}
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+anemia_p
+```
+
+### [Maternal Mortality]{style="font-size:25px"}
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+mat_mort
+```
+:::
+
+## Health
+
+```{r health-charts3}
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Mortality rate, under-5 (per 1,000 live births)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Mortality rate, under-5 (per 1,000 live births)`,
+               name = paste("Mortality rate, under-5 (per 1,000 live births)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Mortality rate, under-5 (per 1,000 live births)"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Number per 1000 live births"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> mort_rate
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Immunization, DPT (% of children ages 12-23 months)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Immunization, DPT (% of children ages 12-23 months)`,
+               name = paste("Immunization, DPT (% of children ages 12-23 months)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Immunization, DPT"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of children ages 12-23 months"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> imm_dpt
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Immunization, measles (% of children ages 12-23 months)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Immunization, measles (% of children ages 12-23 months)`,
+               name = paste("Immunization, measles (% of children ages 12-23 months)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Immunization, measles"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of children ages 12-23 months"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> imm_mea
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Prevalence of stunting, height for age (% of children under 5)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Prevalence of stunting, height for age (% of children under 5)`,
+               name = paste("Prevalence of stunting, height for age (% of children under 5)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Stunting children under 5"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of children under 5"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> stunting
+
+
+```
+
+:::{.panel-tabset}
+
+### Child Mortality
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+mort_rate
+```
+
+
+### Stunting
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+stunting
+```
+### DPT
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+imm_dpt
+```
+### Measles
+```{r}
+#| fig-height: 6
+#| fig-width: 14 
+
+imm_mea
+```
+
+:::
+
+## Education{.center}
+
+  - There is intrinsic value in having a population that is educated.
+  - Education can lead to better outcomes for economic growth.
+  - Education can lead to better social mobility.
+  - Education of mothers is linked to child development outcomes.
+  
+```{r charts-edu}
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Primary completion rate, total (% of relevant age group)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Primary completion rate, total (% of relevant age group)`,
+               name = paste("Primary completion rate, total (% of relevant age group)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Primary Completion Rate"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of relevant age group"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> primary_rate
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Adjusted net enrollment rate, primary (% of primary school age children)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Adjusted net enrollment rate, primary (% of primary school age children)`,
+               name = paste("Adjusted net enrollment rate, primary (% of primary school age children)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Adjusted Net Enrollement rate"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of primary school age children"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> net_enrollment
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Children out of school, female (% of female primary school age)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Children out of school, female (% of female primary school age)`,
+               name = paste("Children out of school, female (% of female primary school age)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Children out of school, female"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of female primary school age"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> female_out_sch
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Children out of school (% of primary school age)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Children out of school (% of primary school age)`,
+               name = paste("Children out of school (% of primary school age)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Children out of school"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of primary school age children"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> child_out_sch
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Government expenditure on education, total (% of GDP)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Government expenditure on education, total (% of GDP)`,
+               name = paste("Government expenditure on education, total (% of GDP)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Government expenditure on education, total"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of GDP"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> edu_exps
+
+```
+
+## Education
+
+:::{.panel-tabset}
+
+### [Primary Completion]{style="font-size:20px"}
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+primary_rate
+```
+
+
+### [Net Enrollment]{style="font-size:20px"}
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+net_enrollment
+```
+### [Out of School]{style="font-size:20px"}
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+child_out_sch
+```
+
+### [Out of School, female]{style="font-size:20px"}
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+female_out_sch
+```
+### [Government Expenditure]{style="font-size:20px"}
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+edu_exps
+```
+:::
+
+## Tech and Research
+
+```{r}
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Research and development expenditure (% of GDP)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Research and development expenditure (% of GDP)`,
+               name = paste("Research and development expenditure (% of GDP)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Research and development expenditure"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of GDP"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> res_exp
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "High-technology exports (% of manufactured exports)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `High-technology exports (% of manufactured exports)`,
+               name = paste("High-technology exports (% of manufactured exports)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "High-technology exports"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of manufactured exports"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> high_exp
+
+```
+
+:::{.panel-tabset}
+
+### [Expenditure on Research and Development]{style="font-size:22px"}
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+res_exp
+
+```
+
+
+### [High Technology Exports]{style="font-size:22px"}
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+high_exp
+
+```
+:::
+
+## Discussion - Mobility
+
+Credit: Development Data Lab
+
+```{=html}
+<iframe width="1400" height="500" src="https://www.devdatalab.org/mobility" title="Quarto Documentation"></iframe>
+```
+
+## Discussion - Segregation
+
+Credit: Development Data Lab
+
+```{=html}
+<iframe width="1400" height="500" src="https://www.devdatalab.org/segregation" title="Quarto Documentation"></iframe>
+```
+
+## Thank you{.center}
+
+**Questions?**
