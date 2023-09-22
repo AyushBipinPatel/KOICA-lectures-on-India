@@ -1,0 +1,387 @@
+---
+title: "India's Socio-Economic Landscape"
+author: "Ayush Patel"
+date: "September 22, 2023"
+subtitle: "Post Independence changes in India"
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+execute: 
+  echo: false
+  warning: false
+---
+
+
+```{r libraries}
+library(here) # directories management
+library(dplyr) # data wrangling
+library(tidyr) # data wrangling
+library(highcharter) # interactive data viz
+
+```
+
+```{r load-data}
+# read in WB data that is processed and combined.
+readr::read_csv(
+  "data/WB_socio_economic_inds.csv"
+) -> wb_all_ind
+
+# transform WB data in long format.
+
+wb_all_ind[,-c(1,69)]|> 
+  pivot_longer(cols = 5:67,
+               names_to = "year",
+               values_to = "val")|>
+  mutate(
+    year = as.numeric(year)
+  )-> wb_all_ind
+
+# create a vector for comparative countries
+
+names_neighbours_iso3c <- c("BGD","PAK","IND",
+                            "CHN","KOR","LKA")
+
+```
+
+
+## Hello
+
+::::{.columns}
+
+:::{.column width="70%"}
+[I am Ayush.]{.fragment fragment-index="1" style="font-size:45px"}
+
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"} 
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics.]{.fragment fragment-index="3" style="font-size:25px"} 
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"} 
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"} 
+:::
+
+:::{.column width="30%"}
+
+__Reach me__
+
+{{< fa solid envelope >}} [ayush.ap58@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel@gipe.ac.in]{style="font-size:25px"}
+
+:::
+
+::::
+
+## A liberal Constitution
+
+[India adopted liberal constitution that came into force on 26 January 1950.]{.fragment fragment-index="1"}
+
+[   - Universal Adult Franchise.]{.fragment fragment-index="2"}
+
+[   - Equality based on caste, creed and religion]{.fragment fragment-index="3"}
+
+[   - Freedom of speech and movement]{.fragment fragment-index="4"}
+
+[   - Directive Principles of State Policy]{.fragment fragment-index="5"}
+
+[   - Independent Judiciary]{.fragment fragment-index="6"}
+
+>[One could say a right recipe for a harmonious society and growth. We will discuss how Indians and Indian society have changed after independence.]{.fragment fragment-index="7"}
+
+## How are we measuring change?
+
+  - **Education** and **Health**, of various groups, are two broad parameters that signal about a society's wellbeing. Additionally, are also signals for a productive and value generating labour force.
+  - We will compare India, using various indicators^[form world bank data], with sub-continental neighbours.
+  - We will also investigate, by discussing two papers from [Development Data Lab](https://www.devdatalab.org/), if change has been true for various groups in India.
+
+## Where does India live?
+
+>"India lives in her villages" - M.K. Gandhi
+
+  - How much does this hold true today?
+  - Is Urbanization desirable?
+  - Has India Urbanized?
+  
+> "What is the village but a sink of localism, a den of ignorance, narrow-mindedness and communalism..." - B.R.Ambedkar
+
+## Where does India Live?
+
+```{r pop-changes}
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Rural population (% of total population)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Rural population (% of total population)`,
+               name = paste("Rural population (% of total population)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Share of Rural Population"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of total population"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> sahre_rural_pop
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Urban population (% of total population)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Urban population (% of total population)`,
+               name = paste("Urban population (% of total population)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Share of Urban Population"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of total population"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> sahre_urban_pop
+
+```
+
+:::{.panel-tabset}
+
+### Rural
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+sahre_rural_pop
+```
+
+
+### Urban
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+sahre_urban_pop
+```
+
+
+:::
+
+## Is India an agrarian economy?{.center}
+
+  - Yes, India was an agrarian economy. Agri,forestry and fishing(1960)-41.7%GDP, Manufacturing(1960)-15%GDP and, Services(1960) - 38.8%GDP.
+  - *Is* India an agrarian economy? Difficult to say. Things have changed(Agri,forestry and fishing(2022)-16.6%GDP, Manufacturing(2022)-13%GDP and, Services(2022) - 48.6%GDP).
+  - Certainly, not same as 1960s. Is the change universal? Today, how many people are engaged in agriculture?
+  
+## Is India an agrarian economy?
+
+```{r engaged-agri}
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Agricultural land (sq. km)"
+    )
+  )|>
+  filter(`Country Code` %in% c("IND","CHN"))|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Agricultural land (sq. km)`,
+               name = paste("Agricultural land (sq. km)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Changes in Agriculture Land (sq. Km.)"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Land in Square Kilometers"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> agri_land_sqm
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Arable land (hectares per person)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Arable land (hectares per person)`,
+               name = paste("Arable land (hectares per person)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Arable land (hectares per person)"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "Hectares per person"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> land_per_person
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Agricultural irrigated land (% of total agricultural land)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Agricultural irrigated land (% of total agricultural land)`,
+               name = paste("Agricultural irrigated land (% of total agricultural land)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Agricultural irrigated land"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of total agricultural land"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> irrigated_land
+
+wb_all_ind|>
+  filter(
+    `Indicator Name` %in% c(
+      "Employment in agriculture (% of total employment) (modeled ILO estimate)"
+    )
+  )|>
+  filter(`Country Code` %in% names_neighbours_iso3c)|>
+  pivot_wider(names_from = `Indicator Name`,
+              values_from = val)|>
+  hchart(type = "spline",
+         hcaes(x = year, y = `Employment in agriculture (% of total employment) (modeled ILO estimate)`,
+               name = paste("Employment in agriculture (% of total employment) (modeled ILO estimate)",
+                            year),
+                  group = `Country Name`))|>
+  hc_title(
+    text = "Employment in agriculture(modeled ILO estimate)"
+  )|>
+  hc_caption(
+    text = "Data - World Bank"
+  )|>
+  hc_yAxis(
+    title = list(
+      text = "% of total employment"
+    )
+  )|>
+   hc_xAxis(
+    title = list(
+      text = "Year"
+    )
+  )|>
+  highcharter::hc_chart(zoomType = "x") -> agri_employed
+
+```
+
+:::{.panel-tabset}
+
+### Land resource
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+agri_land_sqm
+```
+
+
+### Per Capita
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+land_per_person
+```
+
+### Irrigated land
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+irrigated_land
+```
+
+### Labour in Agri
+
+```{r}
+#| fig-height: 6
+#| fig-width: 14
+
+agri_employed
+```
+
+:::
+
+## Inefficiencies in Agriculture
+
+  - Today for India, nearly 43% of the total employment is in Agriculture. Even though, value added by agriculture to GDP is ~16%.
+  - China, that has a comparable population to India, requires a little more than 3 times the area of agriculture land to support itself. This is despite the fact that yield per hectare in China is higher compared to India^[[see1](https://ageconsearch.umn.edu/record/7510/files/edc87-03.pdf),[see2](https://www.nationmaster.com/country-info/compare/China/India/Agriculture),[see3](https://www.cambridge.org/core/journals/journal-of-asian-studies/article/abs/chinese-and-indian-agriculture-a-broad-comparison-of-recent-policy-and-performance/49317DFE78554C23AC3467F604AF009B)].
+  - India has a lower share of irrigated land compared to Bangladesh and Pakistan.
