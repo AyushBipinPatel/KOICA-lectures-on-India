@@ -1598,6 +1598,10 @@ high_exp
 ```
 :::
 
+## India - Poverty Numbers{.center}
+
+Visit and discuss the webapp for [OPHI Global Multidimensional Poverty Index data bank](https://trainingidn.shinyapps.io/OPHIDataBankGlobalComparison/).
+
 ## Discussion - Mobility
 
 Credit: Development Data Lab
